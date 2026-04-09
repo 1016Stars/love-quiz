@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测测你会爱上《恋与深空》的谁？</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b9d, #c44569, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b9d, #c44569);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .question-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .question-number {
+            color: #ff6b9d;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .option:hover {
+            background: rgba(255,107,157,0.15);
+            border-color: rgba(255,107,157,0.4);
+            transform: translateX(5px);
+        }
+        
+        .option:active {
+            transform: scale(0.98);
+        }
+        
+        /* 结果页面 */
+        .result-card {
+            display: none;
+            text-align: center;
+            padding: 40px 30px;
+        }
+        
+        .result-emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .result-name {
+            font-size: 2em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b9d, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .result-title {
+            color: #a0a0a0;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+        
+        .result-description {
+            text-align: left;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #d0d0d0;
+        }
+        
+        .result-description h3 {
+            color: #ff6b9d;
+            margin: 20px 0 10px;
+            font-size: 1em;
+        }
+        
+        .result-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .keyword {
+            background: rgba(255,107,157,0.2);
+            color: #ff6b9d;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(90deg, #ff6b9d, #c44569);
+            border: none;
+            color: white;
+            padding: 14px 40px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,107,157,0.4);
+        }
+        
+        .scores-detail {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .scores-detail h4 {
+            color: #a0a0a0;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        
+        .score-bar-container {
+            margin-bottom: 10px;
+        }
+        
+        .score-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }
+        
+        .score-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .score-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ 测测你会爱上谁 ✨</h1>
+            <p>《恋与深空》男主匹配测试</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 0%"></div>
+        </div>
+        
+        <div id="quiz-container">
+            <!-- 问题会通过JS动态生成 -->
+        </div>
+        
+        <div class="question-card result-card" id="result-card">
+            <div class="result-emoji" id="result-emoji">⭐</div>
+            <div class="result-name" id="result-name">沈星回</div>
+            <div class="result-title" id="result-title">纯爱战神·你的阳光少年</div>
+            <div class="result-keywords" id="result-keywords"></div>
+            <div class="result-description" id="result-description"></div>
+            <div class="scores-detail" id="scores-detail"></div>
+            <button class="restart-btn" onclick="restart()">再测一次</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "深夜emo时，你最想要什么？",
+                options: [
+                    { text: "一个温暖的拥抱，什么都不用说", scores: { shen: 3, xia: 2, li: 1 } },
+                    { text: "有人真正懂我在难过什么", scores: { qi: 3, li: 1 } },
+                    { text: "有人告诉我'没事，有我在'", scores: { qin: 3, li: 1 } },
+                    { text: "一杯热茶，安静的陪伴就好", scores: { li: 3, xia: 2 } }
+                ]
+            },
+            {
+                text: "理想的约会是？",
+                options: [
+                    { text: "阳光下的游乐园，牵手吃棉花糖", scores: { shen: 3, xia: 1 } },
+                    { text: "一起逛美术馆，讨论喜欢的画", scores: { qi: 3 } },
+                    { text: "他带我体验我没尝试过的事物", scores: { qin: 3, qi: 1 } },
+                    { text: "在家做饭看电影，平淡但温馨", scores: { li: 3, xia: 2 } }
+                ]
+            },
+            {
+                text: "你更容易被哪种人吸引？",
+                options: [
+                    { text: "眼神干净，笑起来像有光", scores: { shen: 3 } },
+                    { text: "有点神秘，让人想要了解更多", scores: { qi: 3, li: 1 } },
+                    { text: "成熟稳重，让人有安全感", scores: { qin: 3, li: 2 } },
+                    { text: "温柔体贴，默默为你做很多", scores: { li: 2, xia: 3 } }
+                ]
+            },
+            {
+                text: "恋爱中，你最怕什么？",
+                options: [
+                    { text: "对方不够喜欢我/会变心", scores: { shen: 3, li: 2 } },
+                    { text: "对方不理解我/灵魂不契合", scores: { qi: 3 } },
+                    { text: "我在这段关系里迷失自己", scores: { qin: 2, qi: 1 } },
+                    { text: "不确定这段关系能走多远", scores: { li: 3 } }
+                ]
+            },
+            {
+                text: "你希望伴侣在你遇到困难时？",
+                options: [
+                    { text: "坚定地站在我身边，一起面对", scores: { shen: 3, qin: 1 } },
+                    { text: "给我空间，但让我知道他在", scores: { qi: 2, li: 2, xia: 2 } },
+                    { text: "分析问题，帮我找到解决方向", scores: { qin: 3 } },
+                    { text: "什么都帮我处理好，不让我操心", scores: { li: 3, qin: 1 } }
+                ]
+            },
+            {
+                text: "关于'被追求'和'主动追'：",
+                options: [
+                    { text: "我喜欢势均力敌，双向奔赴", scores: { shen: 3 } },
+                    { text: "希望对方先爱上我，我享受被追", scores: { qi: 3 } },
+                    { text: "我愿意被引导，但要尊重我的意愿", scores: { qin: 3 } },
+                    { text: "谁先谁后不重要，认定了就是一辈子", scores: { li: 3, xia: 1 } }
+                ]
+            },
+            {
+                text: "对于'撒娇'这件事：",
+                options: [
+                    { text: "我超会撒娇！想被宠着", scores: { shen: 2, xia: 2, li: 1 } },
+                    { text: "偶尔撒娇，但不想太黏人", scores: { qi: 2, qin: 1 } },
+                    { text: "其实不太会，但想学", scores: { qin: 2, li: 1 } },
+                    { text: "不用撒娇他也懂我需要什么", scores: { li: 3, qi: 1 } }
+                ]
+            },
+            {
+                text: "你对伴侣的职业有偏好吗？",
+                options: [
+                    { text: "不在意职业，人好就行", scores: { shen: 2, xia: 2 } },
+                    { text: "有艺术气质/创意工作的", scores: { qi: 3 } },
+                    { text: "事业有成，有能力有担当", scores: { qin: 3 } },
+                    { text: "医生、老师等稳定又受人尊敬的", scores: { li: 3 } }
+                ]
+            },
+            {
+                text: "你向往的爱情像什么？",
+                options: [
+                    { text: "童话故事，纯粹美好", scores: { shen: 3 } },
+                    { text: "艺术电影，独特深刻", scores: { qi: 3 } },
+                    { text: "人生导师，相互成长", scores: { qin: 3 } },
+                    { text: "老夫老妻，平淡是真", scores: { li: 3, xia: 1 } }
+                ]
+            },
+            {
+                text: "最后一题：如果用一个词形容你想要的爱情？",
+                options: [
+                    { text: "纯粹", scores: { shen: 3 } },
+                    { text: "懂得", scores: { qi: 3 } },
+                    { text: "成长", scores: { qin: 3 } },
+                    { text: "确定", scores: { li: 3 } },
+                    { text: "治愈", scores: { xia: 3 } }
+                ]
+            }
+        ];
+
+        const results = {
+            shen: {
+                emoji: "⭐",
+                name: "沈星回",
+                title: "纯爱战神·你的阳光少年",
+                keywords: ["纯爱", "阳光", "安全感", "双向奔赴", "少年感"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你的内心住着一个相信童话的少女。在这个复杂的世界里，你渴望一份简单纯粹的爱——不需要猜测、不需要试探，只要确定"他喜欢我，我也喜欢他"就够了。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>沈星回会用最直接的方式表达爱意：想你的时候就说想你，喜欢你就让全世界都知道。他像阳光一样温暖而坦荡，不玩暧昧、不搞套路。和他在一起，你永远不用担心"他是不是不爱我了"——因为他的眼神会出卖他所有的心意。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"我喜欢你，从见到你的第一眼开始，到现在，每一秒都在更喜欢你。"</p>
+                `
+            },
+            qi: {
+                emoji: "🐟",
+                name: "祁煜",
+                title: "病娇艺术家·懂你的灵魂伴侣",
+                keywords: ["懂我", "独特", "灵魂共鸣", "艺术", "被先爱上"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你是一个不太容易被理解的人，或者说，你已经习惯了不被理解。你有自己独特的审美、想法、坚持，不想为了迎合别人而改变自己。你需要的不是一个"懂事"的恋人，而是一个真正"懂你"的人。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>祁煜是"先爱上你的人"。在你还没注意到他之前，他已经看见了你的孤独、你的骄傲、你不被人理解的那一面——然后爱上了这一切。他不会要求你变成别的样子，因为他爱的就是你本来的样子。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"你不需要向我解释什么，我都懂。"</p>
+                `
+            },
+            qin: {
+                emoji: "🦁",
+                name: "秦彻",
+                title: "指导者恋人·你的人生合伙人",
+                keywords: ["成长", "安全感", "被托底", "成熟", "独立又被照顾"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你是一个独立的人，不喜欢被当成弱者，不想在关系中失去自我。但同时，你也渴望有人能在你脆弱时接住你、在你迷茫时给你方向。你想要的不是"保护"，而是"托底"。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>秦彻会尊重你的每一个决定，支持你去做想做的事，同时在背后默默为你兜底。他不会替你做选择，但会在你需要建议时给出方向；他不会把你护在身后，但会让你知道——无论发生什么，他永远是你最后的安全网。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"去做你想做的，我会在你身后。"</p>
+                `
+            },
+            li: {
+                emoji: "🍐",
+                name: "黎深",
+                title: "暗恋成婚·你的理想丈夫",
+                keywords: ["确定", "暗恋", "老夫老妻", "医生", "稳定"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你已经过了为"心动"冲动的年纪。比起轰轰烈烈的爱情，你更想要一个确定的结果：他会一直在，你们会一直在一起。你不需要承诺，你需要的是"已经在发生的未来"。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>黎深是那个"早就爱上你"的人，全世界都知道，只有你不知道。和他在一起，没有暧昧期的忐忑、没有热恋期的患得患失——你们从一开始就像老夫老妻，默契、稳定、心安。他不会说太多情话，但会把你安排进他所有的未来计划里。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"我不是要和你谈恋爱，我是想和你结婚。"</p>
+                `
+            },
+            xia: {
+                emoji: "🍎",
+                name: "夏以昼",
+                title: "温柔治愈·照亮你的小太阳",
+                keywords: ["治愈", "温柔", "包容", "陪伴", "温暖"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你可能经历过一些事，让你对这个世界、对爱情都有点疲惫。你不需要轰轰烈烈，只想要一个安全的港湾，一个可以让你卸下防备的怀抱。你需要被治愈。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>夏以昼的爱像阳光，温暖但不灼热。他会记住你所有的习惯，在你还没开口前就准备好你需要的一切。他不会追问你的过去，只会用行动告诉你：不管你经历过什么，从今以后，我会让你感受到这个世界的善意。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"你可以在我这里，放心地脆弱。"</p>
+                `
+            }
+        };
+
+        const colors = {
+            shen: "#FFD700",
+            qi: "#6BB3D9",
+            qin: "#D4693C",
+            li: "#7CB87C",
+            xia: "#FF6B6B"
+        };
+
+        let currentQuestion = 0;
+        let scores = { shen: 0, qi: 0, qin: 0, li: 0, xia: 0 };
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-container');
+            const question = questions[currentQuestion];
+            
+            // 更新进度条
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            
+            let optionsHTML = question.options.map((opt, idx) => 
+                `<div class="option" onclick="selectOption(${idx})">${opt.text}</div>`
+            ).join('');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">问题 ${currentQuestion + 1} / ${questions.length}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options">${optionsHTML}</div>
+                </div>
+            `;
+        }
+
+        function selectOption(idx) {
+            const option = questions[currentQuestion].options[idx];
+            
+            // 累加分数
+            for (let key in option.scores) {
+                scores[key] = (scores[key] || 0) + option.scores[key];
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            // 找出最高分
+            let maxScore = 0;
+            let winner = 'shen';
+            for (let key in scores) {
+                if (scores[key] > maxScore) {
+                    maxScore = scores[key];
+                    winner = key;
+                }
+            }
+            
+            const result = results[winner];
+            
+            // 隐藏问题，显示结果
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('result-card').style.display = 'block';
+            document.getElementById('progress').style.width = '100%';
+            
+            // 填充结果内容
+            document.getElementById('result-emoji').textContent = result.emoji;
+            document.getElementById('result-name').textContent = result.name;
+            document.getElementById('result-title').textContent = result.title;
+            document.getElementById('result-description').innerHTML = result.description;
+            
+            // 关键词
+            const keywordsHTML = result.keywords.map(k => `<span class="keyword">${k}</span>`).join('');
+            document.getElementById('result-keywords').innerHTML = keywordsHTML;
+            
+            // 分数详情
+            const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+            const names = { shen: '沈星回', qi: '祁煜', qin: '秦彻', li: '黎深', xia: '夏以昼' };
+            
+            let scoresHTML = '<h4>匹配度分析</h4>';
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            
+            for (let [key, score] of sortedScores) {
+                const percent = Math.round((score / maxScore) * 100);
+                scoresHTML += `
+                    <div class="score-bar-container">
+                        <div class="score-label">
+                            <span>${names[key]}</span>
+                            <span>${percent}%</span>
+                        </div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${percent}%; background: ${colors[key]}"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('scores-detail').innerHTML = scoresHTML;
+        }
+
+        function restart() {
+            currentQuestion = 0;
+            scores = { shen: 0, qi: 0, qin: 0, li: 0, xia: 0 };
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('result-card').style.display = 'none';
+            renderQuestion();
+        }
+
+        // 初始化
+        renderQuestion();
+    </script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你会爱上谁？深度版 | 恋与深空</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 650px; margin: 0 auto; }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+        }
+        
+        .header h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #e0aaff, #c77dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header .subtitle {
+            color: #a0a0a0;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        
+        .header .note {
+            color: #778da9;
+            font-size: 0.75em;
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e0aaff, #c77dff);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .question-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .question-section {
+            color: #c77dff;
+            font-size: 0.75em;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .question-number {
+            color: #778da9;
+            font-size: 0.8em;
+            margin-bottom: 12px;
+        }
+        
+        .question-text {
+            font-size: 1.15em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .question-hint {
+            color: #778da9;
+            font-size: 0.8em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        
+        .option {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+        
+        .option:hover {
+            background: rgba(199,125,255,0.12);
+            border-color: rgba(199,125,255,0.3);
+            transform: translateX(4px);
+        }
+        
+        .result-card {
+            display: none;
+            padding: 35px 28px;
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .result-emoji { font-size: 3.5em; margin-bottom: 15px; }
+        
+        .result-name {
+            font-size: 1.8em;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, #e0aaff, #ffd6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .result-title {
+            color: #778da9;
+            font-size: 1em;
+        }
+        
+        .analysis-section {
+            margin-bottom: 25px;
+        }
+        
+        .analysis-title {
+            color: #c77dff;
+            font-size: 0.85em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(199,125,255,0.2);
+        }
+        
+        .analysis-content {
+            color: #d0d0d0;
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+        
+        .analysis-content p { margin-bottom: 12px; }
+        
+        .match-bars { margin-top: 20px; }
+        
+        .match-bar-item { margin-bottom: 12px; }
+        
+        .match-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            margin-bottom: 4px;
+            color: #a0a0a0;
+        }
+        
+        .match-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .match-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+        
+        .restart-btn {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            background: linear-gradient(90deg, #c77dff, #9d4edd);
+            border: none;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(199,125,255,0.3);
+        }
+        
+        .hidden { display: none; }
+        
+        .disclaimer {
+            text-align: center;
+            color: #5c677d;
+            font-size: 0.7em;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💜 你会爱上谁？</h1>
+            <div class="subtitle">《恋与深空》男主匹配测试 · 深度版</div>
+            <div class="note">📊 基于用户画像研究设计，共12题</div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 0%"></div>
+        </div>
+        
+        <div id="quiz-container"></div>
+        
+        <div class="question-card result-card" id="result-card">
+            <div class="result-header">
+                <div class="result-emoji" id="result-emoji"></div>
+                <div class="result-name" id="result-name"></div>
+                <div class="result-title" id="result-title"></div>
+            </div>
+            
+            <div class="analysis-section">
+                <div class="analysis-title">🔍 你的情感画像</div>
+                <div class="analysis-content" id="user-profile"></div>
+            </div>
+            
+            <div class="analysis-section">
+                <div class="analysis-title">💕 为什么是他？</div>
+                <div class="analysis-content" id="match-reason"></div>
+            </div>
+            
+            <div class="analysis-section">
+                <div class="analysis-title">📊 匹配度分析</div>
+                <div class="match-bars" id="match-bars"></div>
+            </div>
+            
+            <div class="disclaimer">
+                本测试基于社交媒体用户画像研究设计，仅供娱乐参考<br>
+                每个人都是独特的，结果不代表绝对匹配
+            </div>
+            
+            <button class="restart-btn" onclick="restart()">再测一次</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                section: "基础背景",
+                text: "你目前的人生阶段是？",
+                hint: "选择最接近的选项",
+                options: [
+                    { text: "学生 / 刚毕业不久", scores: { shen: 3, qi: 2 } },
+                    { text: "职场新人（工作1-3年）", scores: { shen: 2, qi: 2, li: 1 } },
+                    { text: "职场中坚（工作3-8年）", scores: { qin: 3, li: 2 } },
+                    { text: "资深职场人 / 管理层", scores: { qin: 3, li: 2 } }
+                ]
+            },
+            {
+                section: "基础背景",
+                text: "在原生家庭中，你更接近哪种角色？",
+                hint: "这会影响你对亲密关系的期待模式",
+                options: [
+                    { text: "被宠爱的孩子，家人对我比较包容", scores: { shen: 3, li: 1 } },
+                    { text: "长女/长子，从小承担较多家庭责任", scores: { xia: 4, qin: 1 } },
+                    { text: "家里不太被理解的那个，有点格格不入", scores: { qi: 4 } },
+                    { text: "承担家人期望的孩子，压力比较大", scores: { qin: 3, xia: 1 } },
+                    { text: "独生子女 / 比较独立成长", scores: { li: 2, qin: 1, shen: 1 } }
+                ]
+            },
+            {
+                section: "性格特质",
+                text: "社交场合中，你更倾向于？",
+                hint: "I人 vs E人",
+                options: [
+                    { text: "能不去就不去，社交很消耗我", scores: { qi: 2, li: 2, shen: 1 } },
+                    { text: "小范围聚会可以，大型社交算了", scores: { shen: 2, li: 2, xia: 1 } },
+                    { text: "看心情，状态好的时候挺能聊的", scores: { qin: 1, xia: 1, shen: 1 } },
+                    { text: "喜欢社交，人多的场合我很自在", scores: { qin: 2 } }
+                ]
+            },
+            {
+                section: "性格特质",
+                text: "做决定时，你更依赖？",
+                hint: "理性T vs 情感F",
+                options: [
+                    { text: "逻辑分析，列出利弊再决定", scores: { qin: 2, li: 2 } },
+                    { text: "直觉和感受，觉得对就去做", scores: { shen: 2, qi: 2, xia: 1 } },
+                    { text: "先分析，但最后还是跟着感觉走", scores: { qi: 2, shen: 1, li: 1 } },
+                    { text: "会纠结很久，很难做决定", scores: { xia: 2, li: 1 } }
+                ]
+            },
+            {
+                section: "情感需求",
+                text: "在亲密关系中，你最渴望获得的是？",
+                hint: "深入思考你真正需要的是什么",
+                options: [
+                    { text: "确定感——知道这段关系会一直稳定", scores: { li: 4, shen: 1 } },
+                    { text: "被理解——有人真正懂我在想什么", scores: { qi: 4 } },
+                    { text: "成长感——和对方在一起让我变得更好", scores: { qin: 4 } },
+                    { text: "被照顾——不用再逞强，可以脆弱", scores: { xia: 4, shen: 1 } },
+                    { text: "纯粹的爱——不计较、不怀疑，就是喜欢", scores: { shen: 4 } }
+                ]
+            },
+            {
+                section: "情感需求",
+                text: "你理想中的关系权力结构是？",
+                hint: "谁来主导这段关系",
+                options: [
+                    { text: "势均力敌，双方平等", scores: { shen: 3, qi: 1 } },
+                    { text: "希望对方多主导一些，带着我走", scores: { qin: 3, xia: 2 } },
+                    { text: "我来主导比较多，掌控感很重要", scores: { li: 2 } },
+                    { text: "无所谓谁主导，舒服就好", scores: { li: 2, xia: 1, shen: 1 } }
+                ]
+            },
+            {
+                section: "恋爱观",
+                text: "对于被追求和主动追，你的态度是？",
+                hint: "在感情中的主动程度",
+                options: [
+                    { text: "希望对方先表白，我享受被追求的感觉", scores: { qi: 3, xia: 1 } },
+                    { text: "双向奔赴最好，互相确认心意", scores: { shen: 3 } },
+                    { text: "如果我确定喜欢，会主动一点", scores: { qin: 2, li: 1 } },
+                    { text: "谁先谁后不重要，认定了就是认定了", scores: { li: 3 } }
+                ]
+            },
+            {
+                section: "恋爱观",
+                text: "你对完美人设的态度是？",
+                hint: "比如：全能、永远温柔、从不犯错",
+                options: [
+                    { text: "喜欢！完美人设让我有安全感", scores: { shen: 2, li: 2 } },
+                    { text: "可以接受，但希望也有脆弱的一面", scores: { qi: 2, shen: 1, xia: 1 } },
+                    { text: "不太喜欢，感觉不真实", scores: { qi: 2, qin: 1 } },
+                    { text: "比起完美，我更喜欢有缺点但真实的人", scores: { qin: 2, qi: 2 } }
+                ]
+            },
+            {
+                section: "深层心理",
+                text: "如果用一句话形容你对爱情的期待？",
+                hint: "不要想太多，选第一直觉",
+                options: [
+                    { text: "我想要一个童话", scores: { shen: 4 } },
+                    { text: "我想要一个真正懂我的人", scores: { qi: 4 } },
+                    { text: "我想要一个让我成为更好的人的伴侣", scores: { qin: 4 } },
+                    { text: "我想要一个确定的、稳定的未来", scores: { li: 4 } },
+                    { text: "我想要一个可以让我放下防备的港湾", scores: { xia: 4 } }
+                ]
+            },
+            {
+                section: "深层心理",
+                text: "在感情中，你更害怕什么？",
+                hint: "选择最让你焦虑的那个",
+                options: [
+                    { text: "对方不够爱我 / 爱会消失", scores: { shen: 3, li: 1 } },
+                    { text: "不被理解 / 灵魂无法共鸣", scores: { qi: 3 } },
+                    { text: "在关系中迷失自己 / 失去独立性", scores: { qin: 2, qi: 1 } },
+                    { text: "不确定性 / 不知道这段关系会走向哪里", scores: { li: 3 } },
+                    { text: "还要继续坚强 / 不能展示脆弱", scores: { xia: 3 } }
+                ]
+            },
+            {
+                section: "延伸偏好",
+                text: "你平时更喜欢什么类型的内容/作品？",
+                hint: "小说、影视、游戏等",
+                options: [
+                    { text: "纯爱、校园、青春、治愈系", scores: { shen: 3, xia: 1 } },
+                    { text: "暗黑、病娇、艺术、有深度的", scores: { qi: 3 } },
+                    { text: "职场、成长、霸总、都市言情", scores: { qin: 3 } },
+                    { text: "日常、甜宠、婚后、暗恋成真", scores: { li: 3 } },
+                    { text: "禁忌、救赎、保护、家庭情感", scores: { xia: 3 } }
+                ]
+            },
+            {
+                section: "延伸偏好",
+                text: "最后一题：你希望遇见爱情的方式是？",
+                hint: "理想中的相遇",
+                options: [
+                    { text: "青梅竹马，从小一起长大", scores: { shen: 3, li: 1 } },
+                    { text: "命中注定的相遇，灵魂被击中", scores: { qi: 3, shen: 1 } },
+                    { text: "职场/学业中相识，互相欣赏", scores: { qin: 3 } },
+                    { text: "细水长流，从朋友慢慢发展", scores: { li: 3 } },
+                    { text: "被保护/被拯救，从此依赖", scores: { xia: 3, qin: 1 } }
+                ]
+            }
+        ];
+
+        const results = {
+            shen: {
+                emoji: "⭐",
+                name: "沈星回",
+                title: "纯爱战神 · 阳光少年",
+                color: "#FFD700",
+                profile: `<p>你是一个内心保有纯真的人。可能在外人看来你很成熟，但你的心底始终相信美好的事物——相信爱情、相信真心、相信对的人真的存在。</p><p>你不需要太复杂的关系，不想在感情里猜来猜去。你要的很简单：<strong>他喜欢我，我也喜欢他，这就够了</strong>。</p>`,
+                matchReason: `<p><strong>沈星回的用户画像核心</strong>：相信纯爱的理想主义者。</p><p>他会用最直接的方式表达喜欢——想你的时候就说想你，开心就笑，难过就陪着你。他的眼神很干净，笑起来像有光。</p><p>和他在一起，你不用担心"他是不是不爱我了"，因为他的爱太明显了，明显到全世界都看得出来。</p><p><em>「我喜欢你，从见到你的第一眼开始，每一秒都在更喜欢你。」</em></p>`
+            },
+            qi: {
+                emoji: "🐟",
+                name: "祁煜",
+                title: "病娇艺术家 · 灵魂伴侣",
+                color: "#6BB3D9",
+                profile: `<p>你是一个<strong>不太容易被理解</strong>的人——或者说，你已经习惯了不被理解。</p><p>你有自己的审美、自己的坚持、自己独特的思考方式。你不想为了迎合别人而改变自己，也不想要一个只爱「大众版本的你」的人。</p><p>你需要的不是"懂事"的恋人，而是真正<strong>「懂你」</strong>的人。</p>`,
+                matchReason: `<p><strong>祁煜的用户画像核心</strong>：渴望被真正理解的灵魂。</p><p>他是那个「先爱上你」的人。在你还没注意到他之前，他已经看见了你的孤独、你的骄傲、你不被人理解的那一面——然后爱上了这一切。</p><p>他不会要求你变成别的样子，因为他爱的就是你本来的样子。</p><p><em>「你不需要向我解释什么，我都懂。」</em></p>`
+            },
+            qin: {
+                emoji: "🦁",
+                name: "秦彻",
+                title: "指导者恋人 · 人生合伙人",
+                color: "#D4693C",
+                profile: `<p>你是一个<strong>独立且有追求</strong>的人。你不喜欢被当成弱者，不想在关系中失去自我。</p><p>但同时，你内心也渴望有人能在你脆弱时接住你、在你迷茫时给你方向。你想要的不是「保护」，而是<strong>「托底」</strong>。</p><p>可能你的原生家庭给了你一些压力，让你习惯了独自承担。你需要的，是一个能让你「不用再逞强」的人。</p>`,
+                matchReason: `<p><strong>秦彻的用户画像核心</strong>：东亚家庭创伤的治愈者。</p><p>他会尊重你的每一个决定，支持你去做想做的事，同时在背后默默为你兜底。他不会替你做选择，但会在你需要时给出方向。</p><p>他不会把你护在身后，而是让你知道——无论发生什么，他永远是你最后的安全网。</p><p><em>「去做你想做的，我会在你身后。」</em></p>`
+            },
+            li: {
+                emoji: "🍐",
+                name: "黎深",
+                title: "暗恋成婚 · 理想丈夫",
+                color: "#7CB87C",
+                profile: `<p>你是一个<strong>追求确定性</strong>的人。比起轰轰烈烈的心动，你更想要一个稳定的、可以预见未来的关系。</p><p>你可能有过一些情感经历，让你对「不确定」产生了焦虑。你不需要承诺，你需要的是<strong>「已经在发生的未来」</strong>。</p><p>你想要的爱情，是那种「从一开始就像老夫老妻」的默契和心安。</p>`,
+                matchReason: `<p><strong>黎深的用户画像核心</strong>：追求稳定的确定感爱好者。</p><p>他是那个「早就爱上你」的人，全世界都知道，只有你不知道。和他在一起，没有暧昧期的忐忑、没有热恋期的患得患失。</p><p>你们从一开始就像老夫老妻，默契、稳定、心安。他不会说太多情话，但会把你安排进他所有的未来计划里。</p><p><em>「我不是要和你谈恋爱，我是想和你结婚。」</em></p>`
+            },
+            xia: {
+                emoji: "🍎",
+                name: "夏以昼",
+                title: "东亚长女止痛剂 · 无条件保护者",
+                color: "#FF6B6B",
+                profile: `<p>你可能是家里的<strong>长女</strong>，或者从小就承担了很多本不该你承担的责任。</p><p>你习惯了照顾别人、习惯了逞强、习惯了「我可以的」。但你内心深处，非常渴望有一个人能让你<strong>不用再坚强</strong>。</p><p>你需要的不是一个你去照顾的人，而是一个反过来照顾你的人——无条件地、不需要你付出任何代价地。</p>`,
+                matchReason: `<p><strong>夏以昼的用户画像核心</strong>：东亚长女的情感补偿。</p><p>「夏以昼的每一句哥哥，都是对东亚长女的爆杀」——这是小红书上近6000赞的评论。</p><p>他的爱是保护式的、包裹式的。他会记住你所有的习惯，在你还没开口前就准备好你需要的一切。在他这里，你终于可以放下那个「坚强的自己」。</p><p><em>「你可以在我这里，放心地脆弱。」</em></p>`
+            }
+        };
+
+        const colors = { shen: "#FFD700", qi: "#6BB3D9", qin: "#D4693C", li: "#7CB87C", xia: "#FF6B6B" };
+        const names = { shen: '沈星回', qi: '祁煜', qin: '秦彻', li: '黎深', xia: '夏以昼' };
+
+        let currentQuestion = 0;
+        let scores = { shen: 0, qi: 0, qin: 0, li: 0, xia: 0 };
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-container');
+            const q = questions[currentQuestion];
+            
+            document.getElementById('progress').style.width = ((currentQuestion) / questions.length) * 100 + '%';
+            
+            let optionsHTML = q.options.map((opt, idx) => 
+                `<div class="option" onclick="selectOption(${idx})">${opt.text}</div>`
+            ).join('');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-section">${q.section}</div>
+                    <div class="question-number">问题 ${currentQuestion + 1} / ${questions.length}</div>
+                    <div class="question-text">${q.text}</div>
+                    ${q.hint ? `<div class="question-hint">${q.hint}</div>` : ''}
+                    <div class="options">${optionsHTML}</div>
+                </div>
+            `;
+        }
+
+        function selectOption(idx) {
+            const option = questions[currentQuestion].options[idx];
+            for (let key in option.scores) {
+                scores[key] = (scores[key] || 0) + option.scores[key];
+            }
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            let maxScore = 0, winner = 'shen';
+            for (let key in scores) {
+                if (scores[key] > maxScore) { maxScore = scores[key]; winner = key; }
+            }
+            
+            const result = results[winner];
+            
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('result-card').style.display = 'block';
+            document.getElementById('progress').style.width = '100%';
+            
+            document.getElementById('result-emoji').textContent = result.emoji;
+            document.getElementById('result-name').textContent = result.name;
+            document.getElementById('result-title').textContent = result.title;
+            document.getElementById('user-profile').innerHTML = result.profile;
+            document.getElementById('match-reason').innerHTML = result.matchReason;
+            
+            let barsHTML = '';
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            for (let [key, score] of sortedScores) {
+                const percent = Math.round((score / maxScore) * 100);
+                barsHTML += `
+                    <div class="match-bar-item">
+                        <div class="match-label"><span>${names[key]}</span><span>${percent}%</span></div>
+                        <div class="match-bar">
+                            <div class="match-fill" style="width: ${percent}%; background: ${colors[key]}"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('match-bars').innerHTML = barsHTML;
+        }
+
+        function restart() {
+            currentQuestion = 0;
+            scores = { shen: 0, qi: 0, qin: 0, li: 0, xia: 0 };
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('result-card').style.display = 'none';
+            renderQuestion();
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
