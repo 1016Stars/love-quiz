@@ -226,7 +226,7 @@
         <div class="header">
             <h1>💜 你会爱上谁？</h1>
             <div class="subtitle">《恋与深空》男主匹配测试 · 深度版</div>
-            <div class="note">📊 基于用户画像研究设计，共12题</div>
+            <div class="note">📊 基于用户画像研究设计，共13题</div>
         </div>
         
         <div class="progress-bar">
@@ -285,8 +285,8 @@
                 hint: "这会影响你对亲密关系的期待模式",
                 options: [
                     { text: "被宠爱的孩子，家人对我比较包容", scores: { shen: 3, li: 1 } },
-                    { text: "长女/长子，从小承担较多家庭责任", scores: { xia: 4, qin: 1 } },
-                    { text: "家里不太被理解的那个，有点格格不入", scores: { qi: 4 } },
+                    { text: "长女/长子，从小承担较多家庭责任", scores: { xia: 4, qin: 2 } },
+                    { text: "家里不太被理解的那个，有点格格不入", scores: { qi: 3, qin: 1 } },
                     { text: "承担家人期望的孩子，压力比较大", scores: { qin: 3, xia: 1 } },
                     { text: "独生子女 / 比较独立成长", scores: { li: 2, qin: 1, shen: 1 } }
                 ]
@@ -296,10 +296,10 @@
                 text: "社交场合中，你更倾向于？",
                 hint: "I人 vs E人",
                 options: [
-                    { text: "能不去就不去，社交很消耗我", scores: { qi: 2, li: 2, shen: 1 } },
-                    { text: "小范围聚会可以，大型社交算了", scores: { shen: 2, li: 2, xia: 1 } },
-                    { text: "看心情，状态好的时候挺能聊的", scores: { qin: 1, xia: 1, shen: 1 } },
-                    { text: "喜欢社交，人多的场合我很自在", scores: { qin: 2 } }
+                    { text: "能不去就不去，社交很消耗我", scores: { qi: 2, li: 2 } },
+                    { text: "小范围聚会可以，大型社交算了", scores: { shen: 2, li: 2, qin: 1 } },
+                    { text: "看心情，状态好的时候挺能聊的", scores: { qin: 2, xia: 1, shen: 1 } },
+                    { text: "喜欢社交，人多的场合我很自在", scores: { qin: 2, shen: 1 } }
                 ]
             },
             {
@@ -354,8 +354,20 @@
                 options: [
                     { text: "喜欢！完美人设让我有安全感", scores: { shen: 2, li: 2 } },
                     { text: "可以接受，但希望也有脆弱的一面", scores: { qi: 2, shen: 1, xia: 1 } },
-                    { text: "不太喜欢，感觉不真实", scores: { qi: 2, qin: 1 } },
-                    { text: "比起完美，我更喜欢有缺点但真实的人", scores: { qin: 2, qi: 2 } }
+                    { text: "不太喜欢，感觉不真实", scores: { qi: 2 } },
+                    { text: "比起完美，我更喜欢有缺点但真实的人", scores: { qin: 3, qi: 1 } }
+                ]
+            },
+            {
+                section: "深层心理",
+                text: "你更希望伴侣用什么方式爱你？",
+                hint: "这道题很关键，认真选",
+                options: [
+                    { text: "尊重我的决定，但在我需要时默默托底", scores: { qin: 5 } },
+                    { text: "比我先看见我的需求，主动为我做好一切", scores: { xia: 4, li: 1 } },
+                    { text: "读懂我没说出口的情绪，我们灵魂相通", scores: { qi: 5 } },
+                    { text: "直接说喜欢我，让我确定他的心意", scores: { shen: 4, li: 1 } },
+                    { text: "把我放进他所有的未来计划里", scores: { li: 4 } }
                 ]
             },
             {
