@@ -492,7 +492,7 @@
         const fakeResult = {
             emoji: '💕',
             name: '张俊然',
-            title: '异国恋 · 青春校园 · 完美挂件 · 高中同桌 · 超级I人',
+            title: '你的命中注定',
             why: '没有原因，这是强制爱！',
             howLove: '等你来找她玩。',
             oneLine: '最近辛苦啦，但我永远支持你！'
@@ -530,14 +530,20 @@
             document.getElementById('result-description').innerHTML = `
                 <p class="why-you"><span class="label">💫 为什么是她？</span></p>
                 <p>${fakeResult.why}</p>
+                <br>
                 <p class="how-love"><span class="label">💕 她会怎么爱你？</span></p>
                 <p>${fakeResult.howLove}</p>
+                <br>
                 <p class="one-line"><span class="label">🌟 一句话</span></p>
                 <p>"${fakeResult.oneLine}"</p>
             `;
-            document.getElementById('result-keywords').innerHTML = '';
+            // 标签用keyword样式
+            const fakeKeywords = ['异国恋', '青春校园', '完美挂件', '高中同桌', '超级I人'];
+            document.getElementById('result-keywords').innerHTML = fakeKeywords.map(k => `<span class="keyword">${k}</span>`).join('');
+            // 隐藏"再测一次"按钮
+            document.querySelector('.restart-btn').style.display = 'none';
             document.getElementById('scores-detail').innerHTML = `
-                <div style="text-align: center; margin-top: 30px;">
+                <div style="text-align: center; margin-top: 40px;">
                     <button onclick="revealReal()" style="background: linear-gradient(135deg, #ff6b9d, #c44569); color: white; border: none; padding: 15px 40px; border-radius: 25px; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);">
                         点击查看真正的结果 →
                     </button>
@@ -548,6 +554,9 @@
         function revealReal() {
             showingFake = false;
             const result = results[realWinner];
+            
+            // 恢复"再测一次"按钮
+            document.querySelector('.restart-btn').style.display = 'block';
             
             // 填充真实结果内容
             document.getElementById('result-emoji').textContent = result.emoji;
