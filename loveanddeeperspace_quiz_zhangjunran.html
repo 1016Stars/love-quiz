@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玩恋与深空 做幸福女人</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b9d, #c44569, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: #a0a0a0;
+            font-size: 0.9em;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b9d, #c44569);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .question-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .question-number {
+            color: #ff6b9d;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .option:hover {
+            background: rgba(255,107,157,0.15);
+            border-color: rgba(255,107,157,0.4);
+            transform: translateX(5px);
+        }
+        
+        .option:active {
+            transform: scale(0.98);
+        }
+        
+        /* 结果页面 */
+        .result-card {
+            display: none;
+            text-align: center;
+            padding: 40px 30px;
+        }
+        
+        .result-emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .result-name {
+            font-size: 2em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b9d, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .result-title {
+            color: #a0a0a0;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+        
+        .result-description {
+            text-align: left;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #d0d0d0;
+        }
+        
+        .result-description h3 {
+            color: #ff6b9d;
+            margin: 20px 0 10px;
+            font-size: 1em;
+        }
+        
+        .result-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .keyword {
+            background: rgba(255,107,157,0.2);
+            color: #ff6b9d;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(90deg, #ff6b9d, #c44569);
+            border: none;
+            color: white;
+            padding: 14px 40px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,107,157,0.4);
+        }
+        
+        .scores-detail {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .scores-detail h4 {
+            color: #a0a0a0;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        
+        .score-bar-container {
+            margin-bottom: 10px;
+        }
+        
+        .score-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }
+        
+        .score-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .score-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💜 玩恋与深空 做幸福女人</h1>
+            <p>已经改到第12版了，越改越不对了啊！</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 0%"></div>
+        </div>
+        
+        <div id="quiz-container">
+            <!-- 问题会通过JS动态生成 -->
+        </div>
+        
+        <div class="question-card result-card" id="result-card">
+            <div class="result-emoji" id="result-emoji">⭐</div>
+            <div class="result-name" id="result-name">沈星回</div>
+            <div class="result-title" id="result-title">纯爱战神·你的阳光少年</div>
+            <div class="result-keywords" id="result-keywords"></div>
+            <div class="result-description" id="result-description"></div>
+            <div class="scores-detail" id="scores-detail"></div>
+            <button class="restart-btn" onclick="restart()">再测一次</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "深夜emo时，你最想要什么？",
+                options: [
+                    { text: "帮我分析问题，找到出路", scores: { qin: 1 ,li: 3} },
+                    { text: "一个拥抱，默默陪伴我", scores: { shen: 3 ,li:2} },
+                    { text: "“谁惹你不高兴了？我创死他”", scores: { qin: 3 ,xia: 3} },
+                    { text: "他完全共情我的情绪，比我还难过", scores: { qi: 3 } }
+                ]
+            },
+            {
+                text: "你更容易被哪种人吸引？",
+                options: [
+                    { text: "温润如玉，没有棱角", scores: { shen: 3 } },
+                    { text: "有手腕，张扬，领导气质", scores: { qin: 3} },
+                    { text: "有艺术造诣，独特的灵魂", scores: { qi: 3 } },
+                    { text: "沉稳内敛、可以依靠", scores: { li: 3, xia: 2 } },
+                    { text: "执着爱你，不惜代价", scores: { xia: 3 } }
+                ]
+            },
+            {
+                text: "单纯看脸的话，你更喜欢哪种类型？",
+                options: [
+                    { text: "清爽少年，干净阳光", scores: { shen: 3, qi: 1 } },
+                    { text: "美丽少年，精致易碎", scores: { qi: 3, shen: 1 } },
+                    { text: "成熟稳重，可靠低调", scores: { li: 3, qin: 1, xia: 2 } },
+                    { text: "成熟浓艳，荷尔蒙爆棚", scores: { qin: 3, xia: 1 } }
+                ]
+            },
+            {
+                text: "他在生活上很会照顾你，你觉得是为什么？",
+                options: [
+                    { text: "他本身很会照顾人，只是对我多一点", scores: { li: 3 } },
+                    { text: "因为我对他也很好", scores: { shen: 3,qi:3 } },
+                    { text: "他本身不会/不爱照顾人，但对我有很强保护欲", scores: { xia: 3, qin: 3 } }
+                ]
+            },
+            {
+                text: "他偶尔会撒娇或示弱，你的反应是？",
+                options: [
+                    { text: "好可爱！我也撒娇回去，反杀他", scores: { shen: 3 } },
+                    { text: "有点不习惯，我更喜欢他成熟稳重的样子", scores: { qin: 3, li: 2 ,xia: 2} },
+                    { text: "好可爱！我会宠着他、保护他", scores: { qi: 3 } }
+                ]
+            },
+            {
+                text: "吵架时，你希望他怎么做？",
+                options: [
+                    { text: "吵到清楚为止，不能冷战", scores: { qin: 3 } },
+                    { text: "抱住我：“不要吵架好不好？我会难过”", scores: { shen: 3, qi: 3 } },
+                    { text: "先冷静，然后复盘问题，一起解决", scores: { li: 3, qin: 1} },
+                    { text: "立刻认错哄我，不让我难过", scores: { xia: 3 } }
+                ]
+            },
+            {
+                text: "关于'谁先追谁'这件事：",
+                options: [
+                    { text: "他先爱上我，追求我，以我为主", scores: { qi: 3 } },
+                    { text: "双向奔赴，谁也不亏~", scores: { shen: 3 } },
+                    { text: "我先追他，就爱撩老实人", scores: { li: 3 } },
+                    { text: "无所谓，但我懒，让他来主导", scores: { qin: 3, xia: 3 } }
+                ]
+            },
+            {
+                text: "如果他比你更懂某件事：",
+                options: [
+                    { text: "帮我做就行，我不想操心", scores: { xia: 3, li: 2 } },
+                    { text: "分享想法就好，别干涉我", scores: { shen: 3, qi: 3 } },
+                    { text: "带我做一遍，教会我", scores: { qin: 3,xia:2 } }
+                ]
+            },
+            {
+                text: "你理想中的相处状态是？",
+                options: [
+                    { text: "简单随心，相爱就相守", scores: { shen: 3 } },
+                    { text: "他需要我，以我为中心", scores: { qi: 3, xia: 3 } },
+                    { text: "他带领我去往更大的世界", scores: { qin: 3 ,li:3} },
+                    { text: "关系牢不可破，即使互相伤害也不放手", scores: { li: 1, xia: 3 } }
+                ]
+            },
+            {
+                text: "他对你说：“你不爱我了吗？”你的反应是？",
+                options: [
+                    { text: "心疼，安慰他。一定是最近给他的爱不够了", scores: { qi: 3 ,xia: 3} },
+                    { text: "会安慰他，但一定是别的事让他焦虑了，问他原因", scores: { li: 3,shen: 1,qin: 1 } },
+                    { text: "……他不会有这样的时刻", scores: { qin: 3, li: 2 } },
+                    { text: "又是什么花招？", scores: { shen: 3,qi:3 } }
+                ]
+            },
+            {
+                text: "在恋爱中，你更倾向于哪种状态？",
+                options: [
+                    { text: "我们都做自己，只是在一起", scores: { shen: 3, li: 3} },
+                    { text: "让我释放天性、无法无天", scores: { qin: 3,xia: 3 } },
+                    { text: "我们要爱到没有对方就活不下去", scores: { xia: 3,qi: 3 } }
+                ]
+            },
+            {
+                text: "最后一题：你喜欢什么风格的爱情故事？",
+                options: [
+                    { text: "先婚后爱，杂乱生活中渐露真心", scores: { li: 3 } },
+                    { text: "为世俗所不容的爱情，历经波折，酸涩执着", scores: { xia: 3 } },
+                    { text: "双强、反叛，逆天地世俗而行，波澜壮阔", scores: { qin: 3 } },
+                    { text: "温柔、细腻、文艺、浪漫，如剖心的絮语、缥缈的梦境", scores: { qi: 3 } },
+                    { text: "简单、甜蜜，男女主始终坚定相爱，共同守护正道之光", scores: { shen: 3 } }
+                ]
+            }
+        ];
+
+        const results = {
+            shen: {
+                emoji: "⭐",
+                name: "沈星回",
+                title: "纯爱战神·你的阳光少年",
+                keywords: ["纯爱", "阳光", "安全感", "双向奔赴", "少年感"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你的内心住着一个相信童话的少女。在这个复杂的世界里，你渴望一份简单纯粹的爱——不需要猜测、不需要试探，只要确定"他喜欢我，我也喜欢他"就够了。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>星星会去到爱他的人身边。其实你们并不“需要”对方，你们只是在这里，如观镜自照，爱自生发。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"因为花正好开了，而我想送给你。"</p>
+                `
+            },
+            qi: {
+                emoji: "🐟",
+                name: "祁煜",
+                title: "病娇艺术家·懂你的灵魂伴侣",
+                keywords: ["懂我", "独特", "灵魂共鸣", "艺术", "被先爱上"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你是一个不太容易被理解的人，或者说，你已经习惯了不被理解。你有自己独特的审美、想法、坚持，不想为了迎合别人而改变自己。你需要的不是一个"懂事"的恋人，而是一个真正"懂你"的人。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>祁煜是"先爱上你的人"。在你还没注意到他之前，他已经看见了你的孤独、你的骄傲、你不被人理解的那一面——然后爱上了这一切。他不会要求你变成别的样子，因为他爱的就是你本来的样子。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"你不需要向我解释什么，我都懂。"</p>
+                `
+            },
+            qin: {
+                emoji: "🦁",
+                name: "秦彻",
+                title: "指导者恋人·你的人生合伙人",
+                keywords: ["成长", "安全感", "被托底", "成熟", "独立又被照顾"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你是一个独立的人，不喜欢被当成弱者，不想在关系中失去自我。但同时，你也渴望有人能在你脆弱时接住你、在你迷茫时给你方向。你想要的不是"保护"，而是"托底"。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>秦彻会尊重你的每一个决定，支持你去做想做的事，同时在背后默默为你兜底。他不会替你做选择，但会在你需要建议时给出方向；他不会把你护在身后，但会让你知道——无论发生什么，他永远是你最后的安全网。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"去做你想做的，我会在你身后。"</p>
+                `
+            },
+            li: {
+                emoji: "🍐",
+                name: "黎深",
+                title: "暗恋成婚·你的理想丈夫",
+                keywords: ["确定", "暗恋", "老夫老妻", "医生", "稳定"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你已经过了为"心动"冲动的年纪。比起轰轰烈烈的爱情，你更想要一个确定的结果：他会一直在，你们会一直在一起。你不需要承诺，你需要的是"已经在发生的未来"。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>黎深是那个"早就爱上你"的人，全世界都知道，只有你不知道。和他在一起，没有暧昧期的忐忑、没有热恋期的患得患失——你们从一开始就像老夫老妻，默契、稳定、心安。他不会说太多情话，但会把你安排进他所有的未来计划里。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"我不是要和你谈恋爱，我是想和你结婚。"</p>
+                `
+            },
+            xia: {
+                emoji: "🍎",
+                name: "夏以昼",
+                title: "纠缠双生·为你而燃的太阳",
+                keywords: ["执着", "温柔", "包容", "陪伴", "温暖"],
+                description: `
+                    <h3>💫 为什么是他？</h3>
+                    <p>你可能经历过一些事，让你对这个世界、对爱情都有点疲惫。你想要一双执着的手，一个安全的港湾，一个可以让你卸下防备的怀抱。你是一直可以被哥哥牵着手的妹妹。</p>
+                    
+                    <h3>💕 他会怎么爱你？</h3>
+                    <p>夏以昼的爱像阳光，温暖但不灼热。他会记住你所有的习惯，在你还没开口前就准备好你需要的一切。他不会追问你的过去，只会用行动告诉你：不管你经历过什么，从今以后，我会让你感受到这个世界的善意。</p>
+                    
+                    <h3>🌟 一句话</h3>
+                    <p>"你可以在我这里，放心地脆弱。"</p>
+                `
+            }
+        };
+
+        const colors = {
+            shen: "#FFD700",
+            qi: "#6BB3D9",
+            qin: "#D4693C",
+            li: "#7CB87C",
+            xia: "#FF6B6B"
+        };
+
+        let currentQuestion = 0;
+        let scores = { shen: 0, qi: 0, qin: 0, li: 0, xia: 0 };
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-container');
+            const question = questions[currentQuestion];
+            
+            // 更新进度条
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            
+            let optionsHTML = question.options.map((opt, idx) => 
+                `<div class="option" onclick="selectOption(${idx})">${opt.text}</div>`
+            ).join('');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">问题 ${currentQuestion + 1} / ${questions.length}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options">${optionsHTML}</div>
+                </div>
+            `;
+        }
+
+        function selectOption(idx) {
+            const option = questions[currentQuestion].options[idx];
+            
+            // 累加分数
+            for (let key in option.scores) {
+                scores[key] = (scores[key] || 0) + option.scores[key];
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        // 彩蛋：假结果
+        const fakeResult = {
+            emoji: '💕',
+            name: '张俊然',
+            title: '异国恋 · 青春校园 · 完美挂件 · 高中同桌 · 超级I人',
+            why: '没有原因，这是强制爱！',
+            howLove: '等你来找她玩。',
+            oneLine: '最近辛苦啦，但我永远支持你！'
+        };
+        
+        let showingFake = true;
+        let realWinner = 'shen';
+        let realMaxScore = 0;
+
+        function showResult() {
+            // 找出最高分
+            realMaxScore = 0;
+            realWinner = 'shen';
+            for (let key in scores) {
+                if (scores[key] > realMaxScore) {
+                    realMaxScore = scores[key];
+                    realWinner = key;
+                }
+            }
+            
+            // 隐藏问题，显示结果
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('result-card').style.display = 'block';
+            document.getElementById('progress').style.width = '100%';
+            
+            // 先显示假结果
+            showingFake = true;
+            showFakeResult();
+        }
+        
+        function showFakeResult() {
+            document.getElementById('result-emoji').textContent = fakeResult.emoji;
+            document.getElementById('result-name').textContent = fakeResult.name;
+            document.getElementById('result-title').textContent = fakeResult.title;
+            document.getElementById('result-description').innerHTML = `
+                <p class="why-you"><span class="label">💫 为什么是她？</span></p>
+                <p>${fakeResult.why}</p>
+                <p class="how-love"><span class="label">💕 她会怎么爱你？</span></p>
+                <p>${fakeResult.howLove}</p>
+                <p class="one-line"><span class="label">🌟 一句话</span></p>
+                <p>"${fakeResult.oneLine}"</p>
+            `;
+            document.getElementById('result-keywords').innerHTML = '';
+            document.getElementById('scores-detail').innerHTML = `
+                <div style="text-align: center; margin-top: 30px;">
+                    <button onclick="revealReal()" style="background: linear-gradient(135deg, #ff6b9d, #c44569); color: white; border: none; padding: 15px 40px; border-radius: 25px; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);">
+                        点击查看真正的结果 →
+                    </button>
+                </div>
+            `;
+        }
+        
+        function revealReal() {
+            showingFake = false;
+            const result = results[realWinner];
+            
+            // 填充真实结果内容
+            document.getElementById('result-emoji').textContent = result.emoji;
+            document.getElementById('result-name').textContent = '好吧，其实真正的结果是... ' + result.name;
+            document.getElementById('result-title').textContent = result.title;
+            document.getElementById('result-description').innerHTML = result.description;
+            
+            // 关键词
+            const keywordsHTML = result.keywords.map(k => `<span class="keyword">${k}</span>`).join('');
+            document.getElementById('result-keywords').innerHTML = keywordsHTML;
+            
+            // 分数详情
+            const names = { shen: '沈星回', qi: '祁煜', qin: '秦彻', li: '黎深', xia: '夏以昼' };
+            
+            let scoresHTML = '<h4>匹配度分析</h4>';
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            
+            for (let [key, score] of sortedScores) {
+                const percent = Math.round((score / realMaxScore) * 100);
+                scoresHTML += `
+                    <div class="score-bar-container">
+                        <div class="score-label">
+                            <span>${names[key]}</span>
+                            <span>${percent}%</span>
+                        </div>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${percent}%; background: ${colors[key]}"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('scores-detail').innerHTML = scoresHTML;
+        }
+
+        function restart() {
+            currentQuestion = 0;
+            scores = { shen: 0, qi: 0, qin: 0, li: 0, xia: 0 };
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('result-card').style.display = 'none';
+            renderQuestion();
+        }
+
+        // 初始化
+        renderQuestion();
+    </script>
+</body>
+</html>
