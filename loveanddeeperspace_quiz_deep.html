@@ -249,21 +249,22 @@
     <script>
         const questions = [
             {
-                text: "深夜心情不好时，你最想要什么？",
+                text: "深夜emo时，你最想要什么？",
                 options: [
-                    { text: "帮我分析问题，找到出路", scores: { qin: 3 } },
-                    { text: "一个拥抱，然后听他说'我喜欢你'", scores: { shen: 3 } },
-                    { text: "他不追问，默默陪着我或帮我分散注意力", scores: { li: 3 } },
-                    { text: "他比我还难过，让我反过来想安慰他", scores: { qi: 3 } }
+                    { text: "帮我分析问题，找到出路", scores: { qin: 1 ,li: 3} },
+                    { text: "一个拥抱，默默陪伴我", scores: { shen: 3 ,li:2} },
+                    { text: "“谁惹你不高兴了？我创死他”", scores: { qin: 3 ,xia: 3} },
+                    { text: "他完全共情我的情绪，比我还难过", scores: { qi: 3 } }
                 ]
             },
             {
                 text: "你更容易被哪种人吸引？",
                 options: [
-                    { text: "阳光开朗、喜欢直接表达", scores: { shen: 3 } },
-                    { text: "有能力、有魄力", scores: { qin: 3, li: 1 } },
-                    { text: "有才华、有独特的审美", scores: { qi: 3 } },
-                    { text: "沉稳内敛、默默付出", scores: { li: 3, xia: 2 } }
+                    { text: "温润如玉，没有棱角", scores: { shen: 3 } },
+                    { text: "有手腕，张扬，领导气质", scores: { qin: 3} },
+                    { text: "有艺术造诣，独特的灵魂", scores: { qi: 3 } },
+                    { text: "沉稳内敛、可以依靠", scores: { li: 3, xia: 2 } },
+                    { text: "执着爱你，不惜代价", scores: { xia: 3 } }
                 ]
             },
             {
@@ -271,32 +272,32 @@
                 options: [
                     { text: "清爽少年，干净阳光", scores: { shen: 3, qi: 1 } },
                     { text: "美丽少年，精致易碎", scores: { qi: 3, shen: 1 } },
-                    { text: "成熟稳重，可靠安心", scores: { li: 3, qin: 1, xia: 2 } },
+                    { text: "成熟稳重，可靠低调", scores: { li: 3, qin: 1, xia: 2 } },
                     { text: "成熟浓艳，荷尔蒙爆棚", scores: { qin: 3, xia: 1 } }
                 ]
             },
             {
-                text: "他在生活上很会照顾你，你觉得这代表什么？",
+                text: "他在生活上很会照顾你，你觉得是为什么？",
                 options: [
                     { text: "他性格就是这样，细心体贴", scores: { li: 3 } },
-                    { text: "他太在乎我了，怕我累着", scores: { xia: 3 } },
-                    { text: "行动比说爱我更让我安心", scores: { li: 2, qin: 1 } }
+                    { text: "他并没有很照顾我，我们差不多吧", scores: { shen: 3,qi:2 } },
+                    { text: "他对我有很强的保护欲，怕我累着、不开心", scores: { xia: 3, qin: 3 } }
                 ]
             },
             {
                 text: "他偶尔会撒娇或示弱，你的反应是？",
                 options: [
                     { text: "好可爱！我也撒娇回去，然后反杀他", scores: { shen: 3 } },
-                    { text: "有点不习惯，我更喜欢他成熟稳重的样子", scores: { qin: 3, li: 2 } },
+                    { text: "有点不习惯，我更喜欢他成熟稳重的样子", scores: { qin: 3, li: 2 ,xia: 2} },
                     { text: "好可爱！我会宠着他、保护他", scores: { qi: 3 } }
                 ]
             },
             {
-                text: "吵架之后，你更希望他怎么做？",
+                text: "吵架时，你希望他怎么做？",
                 options: [
-                    { text: "不说话，但默默做好饭等我", scores: { li: 3 } },
-                    { text: "马上来抱我，说'不管怎样我都爱你'", scores: { shen: 3 } },
-                    { text: "冷静后复盘问题，一起解决", scores: { qin: 3 } },
+                    { text: "吵到清楚为止，不能冷战", scores: { qin: 3 } },
+                    { text: "抱住我：“不要吵架好不好？我会难过”", scores: { shen: 3, qi: 3 } },
+                    { text: "先冷静，然后复盘问题，一起解决", scores: { li: 3 ;qin: 1} },
                     { text: "立刻认错哄我，不让我难过", scores: { xia: 3 } }
                 ]
             },
@@ -320,45 +321,37 @@
             {
                 text: "你理想中的相处状态是？",
                 options: [
-                    { text: "简单快乐，每天都想见到他", scores: { shen: 3 } },
-                    { text: "他需要我，我也需要他", scores: { qi: 3 } },
-                    { text: "跟着他成长，看到更大的世界", scores: { qin: 3 } },
-                    { text: "稳定安心，不用担心他会走", scores: { li: 2, xia: 2 } }
+                    { text: "简单随心，相爱就相守", scores: { shen: 3 } },
+                    { text: "他需要我，以我为中心", scores: { qi: 3, xia: 2 } },
+                    { text: "他带领我去往更大的世界", scores: { qin: 3 ,li:2} },
+                    { text: "关系牢不可破，即使互相伤害也不放手", scores: { li: 1, xia: 3 } }
                 ]
             },
             {
-                text: "他有时会表现出脆弱或不安全感，你的感受是？",
+                text: "他对你说：“你不爱我了吗？”你的反应是？",
                 options: [
-                    { text: "心疼他，想保护他", scores: { qi: 3 } },
-                    { text: "会安慰他，但希望他别太焦虑", scores: { xia: 2, li: 1 } },
-                    { text: "不太喜欢，我希望他更稳定一点", scores: { li: 3, qin: 2 } }
+                    { text: "心疼，安慰他。一定是最近给他的爱不够了", scores: { qi: 3 ,xia: 3} },
+                    { text: "会安慰他，但一定是别的事让他焦虑了，问他原因", scores: { li: 3,shen: 1,qin: 1 } },
+                    { text: "……他不会有这样的时刻", scores: { qin: 3, li: 2 } },
+                    { text: "又是什么花招？", scores: { shen: 3,qi:3 } }
                 ]
             },
             {
-                text: "两个人都默默喜欢你很久了，你更心动哪个？",
+                text: "在恋爱中，你更倾向于哪种状态？",
                 options: [
-                    { text: "他从不表白，但你发现他偷偷为你做了很多事", scores: { li: 3 } },
-                    { text: "他嘴上说着'才不是为了你'，但身体很诚实", scores: { qi: 3 } }
+                    { text: "我们都做自己，只是在一起", scores: { shen: 3, li: 3} },
+                    { text: "让我释放天性、无法无天", scores: { qin: 3,xia: 3 } },
+                    { text: "我们要爱到没有对方就活不下去", scores: { xia: 3,qi: 3 } }
                 ]
             },
             {
-                text: "在恋爱中，你更想成为哪种人？",
+                text: "最后一题：你喜欢什么风格的爱情故事？",
                 options: [
-                    { text: "和他并肩作战，一起闯荡", scores: { shen: 3 } },
-                    { text: "包容他的一切，成为他的港湾", scores: { qi: 3 } },
-                    { text: "做自己的事业，抽空和他约会", scores: { li: 3 } },
-                    { text: "放下平时的坚强，在他面前撒撒娇", scores: { xia: 3 } },
-                    { text: "跟着他学习成长，看更大的世界", scores: { qin: 3 } }
-                ]
-            },
-            {
-                text: "最后一题：你最想从恋爱里得到什么？",
-                options: [
-                    { text: "确定他不会离开，这段关系稳定", scores: { li: 3 } },
-                    { text: "终于有人心疼我，不用一个人扛", scores: { xia: 3 } },
-                    { text: "被他需要，有人因为我而幸福", scores: { qi: 3 } },
-                    { text: "有人带领我，让我看到更大的世界", scores: { qin: 3 } },
-                    { text: "他喜欢我我也喜欢他，简简单单", scores: { shen: 3 } }
+                    { text: "先婚后爱，杂乱生活中渐露真心", scores: { li: 3 } },
+                    { text: "为世俗所不容的爱情，历经波折，酸涩执着", scores: { xia: 3 } },
+                    { text: "双强、反叛，逆天地世俗而行，波澜壮阔", scores: { qin: 3 } },
+                    { text: "温柔、细腻、文艺、浪漫，如剖心的絮语、缥缈的梦境", scores: { qi: 3 } },
+                    { text: "简单、甜蜜，男女主始终坚定相爱，共同守护正道之光", scores: { shen: 3 } }
                 ]
             }
         ];
@@ -377,7 +370,7 @@
                     <p>沈星回会用最直接的方式表达爱意：想你的时候就说想你，喜欢你就让全世界都知道。他像阳光一样温暖而坦荡，不玩暧昧、不搞套路。和他在一起，你永远不用担心"他是不是不爱我了"——因为他的眼神会出卖他所有的心意。</p>
                     
                     <h3>🌟 一句话</h3>
-                    <p>"我喜欢你，从见到你的第一眼开始，到现在，每一秒都在更喜欢你。"</p>
+                    <p>"因为花正好开了，而我想送给你。"</p>
                 `
             },
             qi: {
